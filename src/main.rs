@@ -13,6 +13,7 @@ fn main() {
         match stream {
             Ok(mut stream) => {
                 let _ = stream.write(b"+PONG\r\n");
+                let __ = stream.write(b"+PONG\r\n");
    
                 // println!("accepted new connection");
             }
