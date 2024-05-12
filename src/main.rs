@@ -12,7 +12,7 @@ fn main() {
     for stream in listener.incoming() {
         match stream {
             Ok(mut stream) => {
-                let _ = stream.write(b"+OK\r\n");
+                let _ = stream.write(b"+PONG\r\n");
    
                 // println!("accepted new connection");
             }
