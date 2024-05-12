@@ -2,6 +2,8 @@
 use std::net::TcpListener;
 use std::io::*;
 use std::thread;
+use std::str::from_utf8;
+mod clientdecoder;
 
 fn main() {
     // You can use print statements as follows for debugging, they'll be visible when running tests.
@@ -15,9 +17,13 @@ fn main() {
         match stream {
             Ok(mut stream) => {
                 thread::spawn(move || {
-                    let mut buffer = [0; 1024];
-                    loop {
+         
+                    for _ in 0..10{
+                        let mut buffer = [0; 1024];
                         let _ = stream.read(&mut buffer);
+                        let s =  from_utf8(&buffer).unwrap();
+                    
+                        println!("result: {}", s);
                         let _ = stream.write(b"+PONG\r\n");
                     }
                 });
