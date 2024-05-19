@@ -1,9 +1,12 @@
+use crate::resp::resp::RespData;
+use crate::resp::resp::Type;
+use crate::resp::resp::Data;
 pub struct BulkString {
-    len: usize,
-    string: String,
+    pub len: usize,
+    pub string: String,
 }
 
-pub fn bulk_string_parser(byte_array: &[u8], position: usize) -> (BulkString, usize) {
+pub fn bulk_string_parser(byte_array: &[u8], position: usize) -> (RespData, usize) {
     if position >= byte_array.len() {
         panic!("Invalid BulkString (position >= byteArray.len())");
     }
@@ -31,7 +34,7 @@ pub fn bulk_string_parser(byte_array: &[u8], position: usize) -> (BulkString, us
     i += 2;
     bulk_string.len = bulk_string_size;
     bulk_string.string = string;
-    (bulk_string, i)
+    (RespData{resp_type:Type::BulkString, data: Data::BulkString(bulk_string)}, i)
 
 }
 
@@ -44,7 +47,13 @@ mod tests {
     fn test_bulk_string_parser() {
         let byte_array = b"$5\r\nhello\r\n";
         let (bulk_string, _) = bulk_string_parser(byte_array, 0);
-        assert_eq!(bulk_string.len, 5);
-        assert_eq!(bulk_string.string, "hello");
+        let _bulk_string = match bulk_string.data {
+            Data::BulkString(b) => {
+                assert_eq!(b.len, 5);
+                assert_eq!(b.string, "hello");
+            },
+            _ => panic!("Invalid BulkString"),
+        };
+     
     }
 }
