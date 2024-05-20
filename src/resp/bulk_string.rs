@@ -4,6 +4,13 @@ use crate::resp::resp::Data;
 pub struct BulkString {
     pub len: usize,
     pub string: String,
+
+}
+
+impl BulkString{
+    pub fn encode(&self) -> String{
+        format!("${}\r\n{}\r\n", self.len, self.string)
+    }
 }
 
 pub fn bulk_string_parser(byte_array: &[u8], position: usize) -> (RespData, usize) {

@@ -1,6 +1,6 @@
-mod bulk_string;
+pub mod bulk_string;
 mod array;
-mod resp;
-mod resp_parser;
+pub mod resp;
+pub mod resp_parser;
 mod infer;
 mod parser_factory;

@@ -3,8 +3,8 @@ use crate::resp::resp::{Type, Data};
 use crate::resp::resp::RespData;
 use crate::resp::resp_parser::{resp_parser};
 pub struct Array{
-    data: Vec<RespData>,
-    size: u32,
+    pub data: Vec<RespData>,
+    pub size: u32,
 }
 impl Array {
     fn new() -> Array {
@@ -64,6 +64,7 @@ pub fn array_parser(byte_array: &[u8], position: usize) -> (RespData, usize){
 
 
     while (i as u32) < byte_array.len() as u32 - 1 {
+       
         if byte_array[i as usize] == b'\r' && byte_array[(i + 1) as usize] == b'\n' {
             i += 2;
             break;
@@ -72,13 +73,18 @@ pub fn array_parser(byte_array: &[u8], position: usize) -> (RespData, usize){
         if byte_array[i as usize] == b'\r' {
             panic!("Invalid Array (missing \\n)");
         }
+
+        if byte_array[i as usize] == 0 {
+
+            break;
+        }
         let (data, new_i) = resp_parser(byte_array, i);
         array.push(data);
         i = new_i;
     }
 
     i += 1;
-
+    println!("{}", array.len());
   
     (RespData{resp_type: Type::Array, data: Data::Array(array)}, i)
     // (array, i)

@@ -1,16 +1,14 @@
 use crate::resp::bulk_string::BulkString;
 use crate::resp::array::Array;
 pub enum Data{
-
-    // Integer,
-    BulkString(BulkString),
+    BulkString(BulkString), 
     Array(Array),
 }
 
 pub enum Type{
-
-    BulkString,
-    Array,
+    BulkString, 
+    Array, 
+  
 }
 pub struct RespData{
     pub resp_type: Type,

@@ -5,6 +5,11 @@ use std::thread;
 use std::str::from_utf8;
 
 mod resp;
+mod command;
+
+use crate::command::command::CommandParser;
+use resp::resp_parser::resp_parser;
+use crate::resp::resp::Data;
 
 
 fn main() {
@@ -23,10 +28,30 @@ fn main() {
                     for _ in 0..10{
                         let mut buffer = [0; 1024];
                         let _ = stream.read(&mut buffer);
-                        let s =  from_utf8(&buffer).unwrap();
-                    
-                        println!("result: {}", s);
-                        let _ = stream.write(b"+PONG\r\n");
+                      
+                        let (data, i) = resp_parser(&buffer, 0);
+                        let command = CommandParser(data);
+                        let reply = command.execute();
+                        // println!("reply: {}", reply);
+                        stream.write(reply.as_bytes());
+                        // let _ = match data.data {
+                        //     Data::BulkString(b) => {
+                        //        println!("BulkString: {}", b.string);
+                        //     },
+                        //     Data::Array(a) => {
+                        //         for d in a.data {
+                        //             match d.data {
+                        //                 Data::BulkString(b) => {
+                        //                     println!("BulkString: {}", b.string);
+                        //                 },
+                        //                 _ => panic!("Invalid BulkString"),
+                        //             };
+                        //         }
+                        //     },
+                        //     _ => panic!("Invalid BulkString"),
+                        // };
+                        // // println!("result: {}", s);
+                        // let _ = stream.write(b"+PONG\r\n");
                     }
                 });
                 // loop {
