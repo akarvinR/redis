@@ -8,6 +8,6 @@ pub fn parser_factory(data_type: Type) -> impl Fn(&[u8], usize) -> (RespData, us
     match data_type {
         Type::Array => array_parser,
         Type::BulkString => bulk_string_parser,
-        
+
     }
 }

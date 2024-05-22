@@ -15,4 +15,3 @@ pub struct RespData{
     pub data: Data,
 
 }
-

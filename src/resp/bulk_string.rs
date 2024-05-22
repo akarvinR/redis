@@ -41,6 +41,7 @@ pub fn bulk_string_parser(byte_array: &[u8], position: usize) -> (RespData, usiz
     i += 2;
     bulk_string.len = bulk_string_size;
     bulk_string.string = string;
+    // println!("BULK STRING {}", bulk_string.string);
     (RespData{resp_type:Type::BulkString, data: Data::BulkString(bulk_string)}, i)
 
 }
