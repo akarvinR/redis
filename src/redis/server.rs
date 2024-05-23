@@ -22,6 +22,7 @@ pub struct RedisServer{
     store: KvStore,
     ipv4: String,
     role: Role,
+    // commands: Vec<Box<dyn Command + Sync>>,
 }
 
 
@@ -33,6 +34,7 @@ impl RedisServer{
             ipv4: ipv4.parse().unwrap(),
             store: KvStore::new(),
             role: Role::Master,
+            // commands: Vec::new(),
         }
     }
 
@@ -42,13 +44,9 @@ impl RedisServer{
     pub fn run(mut self){
         println!("Server running on port {}", self.port);
         let listener = TcpListener::bind(format!("{}:{}", self.ipv4, self.port)).unwrap();
-        // let tempServer = RedisServer::new(&self.ipv4, self.port);
-
         let serverMutex = Arc::new(Mutex::new(self));
-
         for stream in listener.incoming() {
             let server = Arc::clone(&serverMutex);
-
 
             match stream {
                 Ok(mut stream) => {
@@ -56,25 +54,18 @@ impl RedisServer{
                         thread::spawn(move || {
                             loop {
                                 let mut buffer = [0; 1024];
-                                let _ = stream.read(&mut buffer);
-                                // println!("buffer: {}", buffer[0]);
-
                                 if buffer[0] == 0 {
                                     break;
                                 }
-                                // let cloned = Arc::clone(&server);
+
+                                stream.read(&mut buffer).unwrap();
                                 let mut server_t = server.lock().unwrap();
                                 let (data, i) = resp_parser(&buffer, 0);
-
-                                let command = command_parser(data); // 1 - command, 2:4 - args
+                                let command = command_parser(data).unwrap();
                                 let reply = command.execute(&mut server_t);
-                                // let reply = command.execute(&mut *server_t);
-                                // server_t.port = 123;
                                 stream.write(reply.encode().as_bytes());
                             }
                         });
-
-
                 }
                 Err(e) => {
                     println!("error: {}", e);

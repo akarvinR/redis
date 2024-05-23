@@ -1,22 +1,21 @@
 use crate::command::{CommandType, Command, Set, Echo, Ping, Get};
 
-pub fn command_factory(command_type: &String) -> Box<dyn Command>{
+pub fn command_factory(command_type: &String) -> Result<Box<dyn Command>, String>{
     match command_type.to_lowercase().as_str() {
         "set" => {
-            return Box::new(Set{args: Vec::new()});
+            return Ok(Box::new(Set{args: Vec::new()}));
         },
         "echo" => {
-            return  Box::new(Echo{args: Vec::new()});
+            return  Ok(Box::new(Echo{args: Vec::new()}));
         },
         "ping" => {
-            return Box::new(Ping{args: Vec::new()});
+            return Ok(Box::new(Ping{args: Vec::new()}));
         },
         "get" => {
-            return Box::new(Get{args: Vec::new()});
+            return Ok(Box::new(Get{args: Vec::new()}));
         }
         _ => {
-            println!("Invalid Command in command factory {}", command_type.to_lowercase().as_str());
-            panic!("Invalid Command in command factory ")
+            return Err("Invalid Command in command factory".to_string());
         },
     }
 }

@@ -13,10 +13,7 @@ impl Command for Ping {
             data: Data::BulkString(BulkString{len: reply.len(),
                 string: reply, })
         }
-        // return "PONG".to_string();
     }
-
-
     fn set_args(&mut self, args: Vec<String>){
         self.args = args;
     }
