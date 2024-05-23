@@ -8,17 +8,22 @@ use crate::resp::resp::{Data, RespData, Type};
 
 impl Command for Set {
     fn execute(&self, server: &mut RedisServer) -> RespData {
+
+        let key = self.args[0].clone();
+        let value = self.args[1].clone();
+        let mut ttl = u128::MAX;
         let kv_store = server.get_store();
-        let mut reply = "OK".to_string();
-        if self.args.len() == 2 {
-            kv_store.set(self.args[0].clone(), self.args[1].clone(), u64::MAX);
-        } else if self.args.len() == 3 {
-            let ttl = self.args[2].parse::<i64>().unwrap();
-            kv_store.set(self.args[0].clone(), self.args[1].clone(), ttl as u64);
-        } else {
-            reply = "Invalid Arguments".to_string();
+        if self.args.len() > 2{
+            ttl = self.args[3].parse::<u128>().unwrap();
 
         }
+        println!("TTL: {}", ttl);
+        let mut reply = "OK".to_string();
+        kv_store.set(key, value, ttl);
+
+        // kv_store.set(self.args[0].clone(), self.args[1].clone(), ttl);
+
+
 
         RespData{
             resp_type: Type::BulkString,
