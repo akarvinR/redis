@@ -2,9 +2,10 @@
 use crate::redis::kvstore::KvStore;
 use std::net::TcpListener;
 use std::io::*;
-// use std::thread;
+use std::thread;
 use std::str::from_utf8;
-use crossbeam_utils::thread;
+use std::sync::{Arc, Mutex};
+// use crossbeam_utils::thread;
 use crate::resp::encoder;
 
 use crate::command::Command;
@@ -17,7 +18,7 @@ pub enum Role{
     Slave,
 }
 pub struct RedisServer{
-    port : u32,
+    pub port : u32,
     store: KvStore,
     ipv4: String,
     role: Role,
@@ -38,16 +39,21 @@ impl RedisServer{
     pub fn get_store(&mut self) -> &mut KvStore{
         &mut self.store
     }
-    pub fn run(&mut self){
+    pub fn run(mut self){
         println!("Server running on port {}", self.port);
         let listener = TcpListener::bind(format!("{}:{}", self.ipv4, self.port)).unwrap();
+        // let tempServer = RedisServer::new(&self.ipv4, self.port);
+
+        let serverMutex = Arc::new(Mutex::new(self));
 
         for stream in listener.incoming() {
-            
+            let server = Arc::clone(&serverMutex);
+
+
             match stream {
                 Ok(mut stream) => {
-                    thread::scope(|s| {
-                        s.spawn(|_| {
+
+                        thread::spawn(move || {
                             loop {
                                 let mut buffer = [0; 1024];
                                 let _ = stream.read(&mut buffer);
@@ -56,14 +62,18 @@ impl RedisServer{
                                 if buffer[0] == 0 {
                                     break;
                                 }
+                                // let cloned = Arc::clone(&server);
+                                let mut server_t = server.lock().unwrap();
                                 let (data, i) = resp_parser(&buffer, 0);
-                                let command = command_parser(data); // 1 - command, 2:4 - args
-                                let reply = command.execute(self);
 
-                                stream.write(reply.encode().as_bytes());
+                                let command = command_parser(data); // 1 - command, 2:4 - args
+                                // let reply = command.execute(*server_t);
+                                // let reply = command.execute(&mut *server_t);
+                                server_t.port = 123;
+                                // stream.write(reply.encode().as_bytes());
                             }
                         });
-                    }).unwrap();
+
 
                 }
                 Err(e) => {
@@ -71,5 +81,8 @@ impl RedisServer{
                 }
             }
         }
+
+
+
     }
 }
