@@ -9,7 +9,7 @@ use crate::resp::resp::{Data, RespData, Type};
 impl Command for Get {
     fn execute(&self, server: &mut RedisServer) -> RespData {
         let kv_store = server.get_store();
-        let mut reply = "-1".to_string();
+        let mut reply = "".to_string();
 
         if self.args.len() == 1 {
             let value = kv_store.get(self.args[0].clone());
