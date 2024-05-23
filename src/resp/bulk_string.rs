@@ -10,6 +10,9 @@ pub struct BulkString {
 
 impl encoder for BulkString {
     fn encode(&self) -> String{
+        if self.len == 0 {
+            return "$-1\r\n".to_string();
+        }
         format!("${}\r\n{}\r\n", self.len, self.string)
     }
 }
