@@ -67,10 +67,10 @@ impl RedisServer{
                                 let (data, i) = resp_parser(&buffer, 0);
 
                                 let command = command_parser(data); // 1 - command, 2:4 - args
-                                // let reply = command.execute(*server_t);
+                                let reply = command.execute(&mut server_t);
                                 // let reply = command.execute(&mut *server_t);
-                                server_t.port = 123;
-                                // stream.write(reply.encode().as_bytes());
+                                // server_t.port = 123;
+                                stream.write(reply.encode().as_bytes());
                             }
                         });
 
