@@ -14,8 +14,12 @@ impl KvStore {
     }
     pub fn set(&mut self, key: String, value: String, time: u64) {
         self.data.insert(key.clone(), value.clone());
-
-        self.time_to_live.insert(key.clone(),  SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs() + time);
+        let ttl = if time == u64::MAX {
+            u64::MAX
+        } else {
+            SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs() + time
+        };
+        self.time_to_live.insert(key.clone(),  ttl);
     }
 
     pub fn get(&mut self, key: String) -> Option<String>{
