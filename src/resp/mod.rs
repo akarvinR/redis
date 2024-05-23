@@ -4,3 +4,7 @@ pub mod resp;
 pub mod resp_parser;
 mod infer;
 mod parser_factory;
+
+pub trait encoder {
+    fn encode(&self) -> String  ;
+}

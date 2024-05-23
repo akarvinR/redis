@@ -1,19 +1,23 @@
-pub fn command_factory(command_type: CommandType) => impl Command{
-    match command_type {
-        CommandType::Set => {
+use crate::command::{CommandType, Command, Set, Echo, Ping, Get};
 
-
-            return Set{};
-            
+pub fn command_factory(command_type: &String) -> Box<dyn Command>{
+    match command_type.to_lowercase().as_str() {
+        "set" => {
+            return Box::new(Set{args: Vec::new()});
         },
-        CommandType::Echo => {
-
-            return Echo{};
+        "echo" => {
+            return  Box::new(Echo{args: Vec::new()});
         },
-        CommandType::Ping => {
-            println!("Ping command");
-            return Ping{};
+        "ping" => {
+            return Box::new(Ping{args: Vec::new()});
+        },
+        "get" => {
+            return Box::new(Get{args: Vec::new()});
         }
+        _ => {
+            println!("Invalid Command in command factory {}", command_type.to_lowercase().as_str());
+            panic!("Invalid Command in command factory ")
+        },
     }
 }
 

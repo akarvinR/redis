@@ -1,4 +1,4 @@
-
+use crate::resp::encoder;
 use crate::resp::resp::{Type, Data};
 use crate::resp::resp::RespData;
 use crate::resp::resp_parser::{resp_parser};
@@ -29,19 +29,20 @@ impl Array {
         self.size
     }
     
-    fn encode(&self) -> Vec<u8> {
-        let mut result = Vec::new();
-        result.push(b'*');
-        result.extend(self.size.to_string().as_bytes());
-        result.push(b'\r');
-        result.push(b'\n');
-        // for data in &self.data {
-        //     // result.extend(data.encode());
-        // }
-        result
-    }
+
 
    
+}
+
+impl encoder for Array {
+    fn encode(&self) -> String {
+        let mut encoded = format!("*{}\r\n", self.size);
+        for data in &self.data {
+            // let encoded_data = data.encode();
+            // encoded.push_str(&data.encode());
+        }
+        encoded
+    }
 }
 
 pub fn array_parser(byte_array: &[u8], position: usize) -> (RespData, usize){

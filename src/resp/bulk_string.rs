@@ -1,3 +1,4 @@
+use crate::resp::encoder;
 use crate::resp::resp::RespData;
 use crate::resp::resp::Type;
 use crate::resp::resp::Data;
@@ -7,8 +8,8 @@ pub struct BulkString {
 
 }
 
-impl BulkString{
-    pub fn encode(&self) -> String{
+impl encoder for BulkString {
+    fn encode(&self) -> String{
         format!("${}\r\n{}\r\n", self.len, self.string)
     }
 }
