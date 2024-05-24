@@ -53,12 +53,14 @@ impl RedisServer{
 
                         thread::spawn(move || {
                             loop {
+                                println!("Connection established");
                                 let mut buffer = [0; 1024];
+
+
+                                stream.read(&mut buffer).unwrap();
                                 if buffer[0] == 0 {
                                     break;
                                 }
-
-                                stream.read(&mut buffer).unwrap();
                                 let mut server_t = server.lock().unwrap();
                                 let (data, i) = resp_parser(&buffer, 0);
                                 let command = command_parser(data).unwrap();
