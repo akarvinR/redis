@@ -18,9 +18,11 @@ pub struct RedisServer{
     port : u32,
     store: KvStore,
     ipv4: String,
-    role: String,
+    pub role: String,
     servers: Vec<RedisServer>,
 
+    pub master_host: String,
+    pub master_port: String,
     pub master_replid: String,
     pub master_repl_offset: u32,
     pub num_slaves: u32,
@@ -46,6 +48,8 @@ impl RedisServer{
             master_replid: "".to_string(),
             master_repl_offset: 0,
             num_slaves: 0,
+            master_host: "".to_string(),
+            master_port: "".to_string(),
 
             // commands: Vec::new(),
         }
