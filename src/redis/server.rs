@@ -45,7 +45,7 @@ impl RedisServer{
             store: KvStore::new(),
             role: "master".to_string(),
             servers: Vec::new(),
-            master_replid: "".to_string(),
+            master_replid: "8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb".to_string(),
             master_repl_offset: 0,
             num_slaves: 0,
             master_host: "".to_string(),
