@@ -32,6 +32,9 @@ struct Get {
 struct Echo {
     args: Vec<String>
 }
+struct Info {
+    args: Vec<String>
+}
 
 pub mod command_factory;
 pub mod ping;
@@ -39,3 +42,4 @@ pub mod echo;
 pub mod set;
 pub mod command;
 mod get;
+mod info;

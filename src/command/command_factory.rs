@@ -1,4 +1,4 @@
-use crate::command::{CommandType, Command, Set, Echo, Ping, Get};
+use crate::command::{CommandType, Command, Set, Echo, Ping, Get, Info};
 
 pub fn command_factory(command_type: &String) -> Result<Box<dyn Command>, String>{
     match command_type.to_lowercase().as_str() {
@@ -13,7 +13,10 @@ pub fn command_factory(command_type: &String) -> Result<Box<dyn Command>, String
         },
         "get" => {
             return Ok(Box::new(Get{args: Vec::new()}));
-        }
+        },
+        "info" => {
+            return Ok(Box::new(Info{args: Vec::new()}));
+        },
         _ => {
             return Err("Invalid Command in command factory".to_string());
         },

@@ -13,27 +13,40 @@ use crate::command::command::command_parser;
 use crate::resp::resp_parser::resp_parser;
 use crate::resp::resp::Data;
 // use crate::resp::encode;
-pub enum Role{
-    Master,
-    Slave,
-}
+
 pub struct RedisServer{
-    pub port : u32,
+    port : u32,
     store: KvStore,
     ipv4: String,
-    role: Role,
+    role: String,
+    servers: Vec<RedisServer>,
+
+    pub master_replid: String,
+    pub master_repl_offset: u32,
+    pub num_slaves: u32,
     // commands: Vec<Box<dyn Command + Sync>>,
 }
 
 
 
 impl RedisServer{
+
+    pub fn get_role(&self) -> String{
+        self.role.clone()
+    }
+
+
     pub fn new(ipv4: &str, port: u32) -> RedisServer{
         RedisServer{
             port: port, 
             ipv4: ipv4.parse().unwrap(),
             store: KvStore::new(),
-            role: Role::Master,
+            role: "master".to_string(),
+            servers: Vec::new(),
+            master_replid: "".to_string(),
+            master_repl_offset: 0,
+            num_slaves: 0,
+
             // commands: Vec::new(),
         }
     }
