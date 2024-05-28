@@ -36,6 +36,9 @@ struct Info {
     args: Vec<String>
 }
 
+struct ReplConf{
+    args: Vec<String>
+}
 pub mod command_factory;
 pub mod ping;
 pub mod echo;
@@ -43,3 +46,4 @@ pub mod set;
 pub mod command;
 mod get;
 mod info;
+pub mod replconf;

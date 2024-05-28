@@ -16,19 +16,26 @@ impl Command for Info {
         if(self.args.len() == 0 || self.args.len() > 1){
             reply = "Wrong args".to_string();
         }
+        else{
 
+            if self.args[0] == "replication" {
+                let num_slaves = server.getConfig("num_slaves", "0").parse::<i32>().unwrap();
+                let master_replid = server.getConfig("master_replid", "").to_string();
+                let master_repl_offset = server.getConfig("master_repl_offset", "0").parse::<i32>().unwrap();
+                let role = server.getConfig("role", "").to_string();
+                let keys = ["connected_slaves", "master_replid", "master_repl_offset", "role"];
 
-        if self.args[0] == "replication"{
-            let keys = ["connected_slaves", "master_replid", "master_repl_offset", "role"];
-            let values = [server.num_slaves.to_string(), server.master_replid.clone(),
-                server.master_repl_offset.clone().to_string(), server.get_role()];
-            for i in 0..keys.len(){
-                reply = format!("{}{}:{}\n", reply, keys[i].clone(), values[i].clone());
+                let values = [num_slaves.to_string(), master_replid.clone(),
+                    master_repl_offset.clone().to_string(), role.clone()];
+                for i in 0..keys.len() {
+                    reply = format!("{}{}:{}\n", reply, keys[i].clone(), values[i].clone());
+                }
+            }
+            else{
+                reply = "Wrong args".to_string();
             }
         }
-        else{
-            reply = "Wrong args".to_string();
-        }
+
 
         RespData{
             resp_type: Type::BulkString,
