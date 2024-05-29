@@ -6,6 +6,10 @@ use crate::resp::bulk_string::BulkString;
 use crate::resp::resp::{Data, RespData, Type};
 
 impl Command for Ping {
+
+    fn make(&self) -> String{
+        return "ping".to_string()
+    }
     fn execute(&self, server: &mut RedisServer) -> RespData {
         let reply = "PONG".to_string();
         RespData{

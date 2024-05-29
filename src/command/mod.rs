@@ -1,4 +1,4 @@
-// pub mod command;
+//TODO : Refactor
 
 use crate::redis::server::RedisServer;
 use crate::resp::resp::RespData;
@@ -11,7 +11,7 @@ pub enum CommandType{
 }
 pub trait Command{
     //Execute on Server
-
+    fn make(&self) -> String;
     fn execute(&self, redis_server: &mut RedisServer) -> RespData;
     fn set_args(&mut self, args: Vec<String>);
 

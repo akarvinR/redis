@@ -17,8 +17,12 @@ fn parse(mut args: Vec<String>) -> HashMap<String, String> {
 
 }
 impl Command for ReplConf{
-
-
+    fn make(&self) -> String{
+        let mut commandString = "replconf ".to_string();
+        let args = &self.args;
+        commandString.push_str(&*args.join(" "));
+        commandString
+    }
     fn execute(&self, server: &mut RedisServer) -> RespData {
         let reply = "OK".to_string();
         let config = parse(self.args.clone());

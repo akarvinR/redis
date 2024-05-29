@@ -1,4 +1,4 @@
-
+//TODO State Pattern
 use crate::redis::kvstore::KvStore;
 use std::net::{TcpListener, TcpStream};
 use std::io::*;
@@ -145,6 +145,13 @@ impl RedisServer{
              let reply = command.execute(self);
              stream.write(reply.encode().as_bytes());
          }
+
+    }
+
+    pub fn listenToClients(mut self){
+
+    }
+    pub fn runAsMaster(mut self){
 
     }
     pub fn run(mut self){

@@ -3,7 +3,8 @@ use std::collections::HashMap;
 pub mod server;
 pub mod kvstore;
 pub mod argsParser;
-mod slaveOps;
+mod slaveService;
+mod masterService;
 
 
 pub fn getDefaultConfig () -> HashMap<String, String> {

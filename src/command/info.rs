@@ -7,6 +7,12 @@ use crate::resp::bulk_string::BulkString;
 use crate::resp::resp::{Data, RespData, Type};
 
 impl Command for Info {
+    fn make(&self) -> String{
+        let mut commandString = "info ".to_string();
+        let args = &self.args;
+        commandString.push_str(&*args.join(" "));
+        commandString
+    }
     fn execute(&self, server: &mut RedisServer) -> RespData {
         // let kv_store = server.get_store();
         // let reply   = "Server is running".to_string();

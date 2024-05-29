@@ -7,6 +7,13 @@ use crate::resp::bulk_string::BulkString;
 use crate::resp::resp::{Data, RespData, Type};
 
 impl Command for Set {
+
+    fn make(&self) -> String{
+        let mut commandString = "set ".to_string();
+        let args = &self.args;
+        commandString.push_str(&*args.join(" "));
+        commandString
+    }
     fn execute(&self, server: &mut RedisServer) -> RespData {
 
         let key = self.args[0].clone();

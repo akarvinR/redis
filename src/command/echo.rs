@@ -5,6 +5,12 @@ use crate::resp::bulk_string::BulkString;
 use crate::resp::resp::{Data, RespData, Type};
 
 impl Command for Echo {
+    fn make(&self) -> String{
+        let mut commandString = "echo ".to_string();
+        let args = &self.args;
+        commandString.push_str(&*args.join(" "));
+        commandString
+    }
     fn execute(&self, server: &mut RedisServer) -> RespData
     {
         let reply = self.args.join(" ");
