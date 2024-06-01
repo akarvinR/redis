@@ -5,6 +5,8 @@ pub mod kvstore;
 pub mod argsParser;
 mod slaveService;
 mod masterService;
+mod state;
+mod service;
 
 
 pub fn getDefaultConfig () -> HashMap<String, String> {
